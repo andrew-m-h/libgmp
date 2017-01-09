@@ -1,6 +1,8 @@
 module gmp.gmp;
 
 public import gmp.integer;
+public import gmp.rational;
+public import gmp.floating;
 
 enum GMP_LIMB_BITS = 64;
 enum GMP_NAIL_BITS = 0;
