@@ -1,7 +1,9 @@
 module deimos.gmp.rational;
 
 import deimos.gmp.gmp;
+
 import core.stdc.stdio : FILE;
+import core.stdc.config : c_long, c_ulong;
 
 extern (C) nothrow:
 
@@ -26,10 +28,10 @@ alias mpq_cmp = __gmpq_cmp;
 extern (C) int __gmpq_cmp (mpq_srcptr, mpq_srcptr) pure;
 
 alias _mpq_cmp_si = __gmpq_cmp_si;
-extern (C) int __gmpq_cmp_si (mpq_srcptr, long, long) pure;
+extern (C) int __gmpq_cmp_si (mpq_srcptr, c_long, c_long) pure;
 
 alias _mpq_cmp_ui = __gmpq_cmp_ui;
-extern (C) int __gmpq_cmp_ui (mpq_srcptr, ulong, ulong) pure;
+extern (C) int __gmpq_cmp_ui (mpq_srcptr, c_ulong, c_ulong) pure;
 
 alias mpq_cmp_z = __gmpq_cmp_z;
 extern (C) int __gmpq_cmp_z (mpq_srcptr, mpz_srcptr) pure;
@@ -95,13 +97,13 @@ alias mpq_set_num = __gmpq_set_num;
 extern (C) void __gmpq_set_num (mpq_ptr, mpz_srcptr);
 
 alias mpq_set_si = __gmpq_set_si;
-extern (C) void __gmpq_set_si (mpq_ptr, long, ulong);
+extern (C) void __gmpq_set_si (mpq_ptr, c_long, c_ulong);
 
 alias mpq_set_str = __gmpq_set_str;
 extern (C) int __gmpq_set_str (mpq_ptr, const char *, int);
 
 alias mpq_set_ui = __gmpq_set_ui;
-extern (C) void __gmpq_set_ui (mpq_ptr, ulong, ulong);
+extern (C) void __gmpq_set_ui (mpq_ptr, c_ulong, c_ulong);
 
 alias mpq_set_z = __gmpq_set_z;
 extern (C) void __gmpq_set_z (mpq_ptr, mpz_srcptr);

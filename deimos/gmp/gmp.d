@@ -10,6 +10,7 @@ enum GMP_NAIL_MASK = ~ GMP_NUMB_MASK;
 
 import core.stdc.stddef;
 import core.stdc.limits;
+import core.stdc.config : c_long, c_ulong;
 
 extern (C) nothrow:
 
@@ -17,10 +18,10 @@ version (__GMP_SHORT_LIMB){
     alias mp_limb_t = uint;
     alias mp_limb_signed_t = int;
 } else {
-    alias mp_limb_t = ulong;
-    alias mp_limb_signed_t = long;
+    alias mp_limb_t = c_ulong;
+    alias mp_limb_signed_t = c_long;
 }
-alias mp_bitcnt_t = ulong;
+alias mp_bitcnt_t = c_ulong;
 
 struct __mpz_struct {
     int _mp_alloc;
@@ -29,13 +30,13 @@ struct __mpz_struct {
 }
 
 alias MP_INT = __mpz_struct;
-alias mpz_t = __mpz_struct[1];
+alias mpz_t = __mpz_struct;
 
 alias mp_ptr = mp_limb_t*;
 alias mp_srcptr = const mp_limb_t*;
 
-alias mp_size_t = long;
-alias mp_exp_t = long;
+alias mp_size_t = c_long;
+alias mp_exp_t = c_long;
 
 struct __mpq_struct {
     __mpz_struct _mp_num;
@@ -43,7 +44,7 @@ struct __mpq_struct {
 }
 
 alias MP_RAT = __mpq_struct;
-alias mpq_t = __mpq_struct[1];
+alias mpq_t = __mpq_struct;
 
 struct __mpf_struct {
     int _mp_prec;
@@ -79,8 +80,8 @@ alias mpq_ptr = __mpq_struct*;
 T __GMP_ABS(T)(T x){return x >= 0 ? x : -x;}
 T __GMP_MAX(T)(T x, T y){return x > y ? x : y;}
 
-mpz_t mpq_numref(mpq_t Q){return [Q[0]._mp_num];}
-mpz_t mpq_denref(mpq_t Q){return [Q[0]._mp_den];}
+mpz_t mpq_numref(mpq_t Q){return Q._mp_num;}
+mpz_t mpq_denref(mpq_t Q){return Q._mp_den;}
 
 alias mp_set_memory_functions = __gmp_set_memory_functions;
 extern (C) void __gmp_set_memory_functions (void *function(size_t),
@@ -111,7 +112,7 @@ alias gmp_randinit_default = __gmp_randinit_default;
 extern (C) void __gmp_randinit_default(gmp_randstate_t);
 
 alias gmp_randinit_lc_2exp = __gmp_randinit_lc_2exp;
-extern (C) void __gmp_randinit_lc_2exp(gmp_randstate_t, mpz_srcptr, ulong, mp_bitcnt_t);
+extern (C) void __gmp_randinit_lc_2exp(gmp_randstate_t, mpz_srcptr, c_ulong, mp_bitcnt_t);
 
 alias gmp_randinit_lc_2exp_size = __gmp_randinit_lc_2exp_size;
 extern (C) void __gmp_randinit_lc_2exp_size(gmp_randstate_t, mp_bitcnt_t);
@@ -126,13 +127,13 @@ alias gmp_randseed = __gmp_randseed;
 extern (C) void __gmp_randseed (gmp_randstate_t, mpz_srcptr);
 
 alias gmp_randseed_ui = __gmp_randseed_ui;
-extern (C) void __gmp_randseed_ui (gmp_randstate_t, ulong);
+extern (C) void __gmp_randseed_ui (gmp_randstate_t, c_ulong);
 
 alias gmp_randclear = __gmp_randclear;
 extern (C) void __gmp_randclear (gmp_randstate_t);
 
 alias gmp_urandomb_ui = __gmp_urandomb_ui;
-extern (C) ulong __gmp_urandomb_ui (gmp_randstate_t, ulong);
+extern (C) c_ulong __gmp_urandomb_ui (gmp_randstate_t, c_ulong);
 
 alias gmp_urandomm_ui = __gmp_urandomm_ui;
-extern (C) ulong __gmp_urandomm_ui (gmp_randstate_t, ulong);
+extern (C) c_ulong __gmp_urandomm_ui (gmp_randstate_t, c_ulong);

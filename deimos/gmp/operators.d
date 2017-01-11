@@ -5,6 +5,7 @@ import deimos.gmp.integer;
 
 import std.string;
 import std.stdio;
+import core.stdc.config : c_long, c_ulong;
 
 static import core.stdc.stdio;
 
@@ -14,16 +15,16 @@ enum DefaultBase = 10;
 
 struct Integer
 {
-    __mpz_struct value;
+    mpz_t value;
 
     void init(){
         mpz_init(&value);
     }
 
-    this(in long v){
+    this(in c_long v){
         mpz_init_set_si(&value, v);
     }
-    this(in ulong v){
+    this(in c_ulong v){
         mpz_init_set_ui(&value, v);
     }
     this(in double v){
@@ -40,7 +41,7 @@ struct Integer
         mpz_clear(&value);
     }
     this(this){
-        __mpz_struct tmp;
+        mpz_t tmp;
         mpz_init_set(&tmp, &value);
         value = tmp;
     }
@@ -52,7 +53,7 @@ struct Integer
         return this;
     }
 
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "+") {
             mpz_add_ui(&value, &value, v);
             return this;
@@ -62,7 +63,7 @@ struct Integer
             mpz_add(&value, &value, &v.value);
             return this;
         }
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "-"){
             mpz_sub_ui(&value, &value, v);
             return this;
@@ -72,12 +73,12 @@ struct Integer
             mpz_sub(&value, &value, &v.value);
             return this;
         }
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "*"){
             mpz_mul_ui(&value, &value, v);
             return this;
         }
-    ref Integer opOpAssign(string op)(in long v)
+    ref Integer opOpAssign(string op)(in c_long v)
         if (op == "*"){
             mpz_mul_si(&value, &value, v);
             return this;
@@ -87,7 +88,7 @@ struct Integer
             mpz_mul(&value, &value, &v.value);
             return this;
         }
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "/"){
             mpz_fdiv_q_ui(&value, &value, v);
             return this;
@@ -97,7 +98,7 @@ struct Integer
             mpz_fdiv_q(&value, &value, &v.value);
             return this;
         }
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "%"){
             mpz_mod_ui(&value, &value, v);
             return this;
@@ -107,7 +108,7 @@ struct Integer
             mpz_mod(&value, &value, &v.value);
             return this;
         }
-    ref Integer opOpAssign(string op)(in ulong v)
+    ref Integer opOpAssign(string op)(in c_ulong v)
         if (op == "^^"){
             mpz_pow_ui(&value, &value, v);
             return this;
@@ -144,12 +145,12 @@ struct Integer
             mpz_add_ui(&value, &value, 1UL);
             return this;
         }
-    __gmpz_struct opUnary(string op)() const
+    mpz_t opUnary(string op)() const
         if (op == "*"){
             return *&value;
         }
 
-    Integer opBinary(string op)(in ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "+"){
             Integer ret = this;
             mpz_add_ui(&ret.value, &value, v);
@@ -161,13 +162,13 @@ struct Integer
             mpz_add(&ret.value, &value, &v.value);
             return ret;
         }
-    Integer opBinary(string op)(in ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "-"){
         Integer ret = this;
         mpz_sub_ui(&ret.value, &value, v);
         return ret;
         }
-    Integer opBinaryRight(string op)(in ulong v)
+    Integer opBinaryRight(string op)(in c_ulong v)
         if (op == "-"){
             Integer ret = this;
             mpz_ui_sub(&ret.value, v, &value);
@@ -179,13 +180,13 @@ struct Integer
             mpz_sub(&ret.value, &value, &v.value);
             return ret;
         }
-    Integer opBinary(string op)(ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "*"){
             Integer ret = this;
             mpz_mul_ui(&ret.value, &value, v);
             return ret;
         }
-    Integer opBinary(string op)(long v)
+    Integer opBinary(string op)(in c_long v)
         if (op == "*"){
             Integer ret = this;
             mpz_mul_si(&ret.value, &value, v);
@@ -201,7 +202,7 @@ struct Integer
         mpz_abs(&value, &value);
         return this;
     }
-    Integer opBinary(string op)(in ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "/"){
             Integer ret = this;
             mpz_fdiv_q_ui(&ret.value, &value, v);
@@ -213,7 +214,7 @@ struct Integer
             mpz_fdiv_q(&ret.value, &value, &v.value);
             return ret;
         }
-    Integer opBinary(string op)(in ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "%"){
             Integer ret = this;
             mpz_mod_ui(&ret.value, &value, v);
@@ -225,7 +226,7 @@ struct Integer
             mpz_mod(&ret.value, &value, &v.value);
             return ret;
         }
-    Integer opBinary(string op)(in ulong v)
+    Integer opBinary(string op)(in c_ulong v)
         if (op == "^^"){
             Integer ret = this;
             mpz_pow_ui(&ret.value, &value, v);
@@ -247,10 +248,10 @@ struct Integer
             mpz_xor(&ret.value, &value, &v.value);
         }
 
-    ulong opCast(T : ulong)() const {
+    c_ulong opCast(T : c_ulong)() const {
         return mpz_get_ui(&value);
     }
-    long opCast(T : long)() const {
+    c_long opCast(T : c_long)() const {
         return mpz_get_si(&value);
     }
     double opCast(T : double)() const {
@@ -263,10 +264,10 @@ struct Integer
         return cast(mpz_ptr)&value;
     }
 
-    bool opEquals(in ulong v) const {
+    bool opEquals(in c_ulong v) const {
         return mpz_cmp_ui(&value, v) == 0;
     }
-    bool opEquals(in long v) const {
+    bool opEquals(in c_long v) const {
         return mpz_cmp_si(&value, v) == 0;
     }
     bool opEquals(in double v) const {
@@ -276,10 +277,10 @@ struct Integer
         return mpz_cmp(&value, &v.value) == 0;
     }
 
-    int opCmp(in ulong v) const {
+    int opCmp(in c_ulong v) const {
         return mpz_cmp_ui(&value, v);
     }
-    int opCmp(in long v) const {
+    int opCmp(in c_long v) const {
         return mpz_cmp_si(&value, v);
     }
     int opCmp(in double v) const {
@@ -321,12 +322,12 @@ unittest{
     debug writeln("Running Test: Subtraction");
     Integer x = 100L;
     auto y = Integer(9.8); //9
-    Integer z = ulong.max;
+    Integer z = c_ulong.max;
     auto ans = z - x - 200 - y;
-    assert(ans == ulong.max - 100 - 200 - 9);
+    assert(ans == c_ulong.max - 100 - 200 - 9);
     ans -= Integer(4.3);
     ans -= 100000UL;
-    assert(ans == ulong.max - 100 - 200 - 9 - 4 - 100000);
+    assert(ans == c_ulong.max - 100 - 200 - 9 - 4 - 100000);
     debug ++TestCount;
 }
 
@@ -363,7 +364,7 @@ unittest{
 //Fermats Little Theorem
 unittest{
     //calculate a mersenne prime, M(p) = 2 ^ p - 1
-    Integer M(in ulong p) {
+    Integer M(in c_ulong p) {
         Integer x = 2UL;
         x ^^= p;
         return x - 1;
@@ -375,9 +376,9 @@ unittest{
       Fermats little theorem: a ^ p ≡ a (mod p) ∀ prime p
       check Fermats little theorem for a ≤ 100000 and all mersene primes M(p) : p ≤ 127
      */
-    foreach (const ulong i; [2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127])
+    foreach (const c_ulong i; [2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127])
     {
-        for (ulong j = 2; j <= 100000; j++){
+        for (c_ulong j = 2; j <= 100000; j++){
             Integer p = M(i);
             Integer a = j;
             Integer lhs = 0L;
@@ -414,10 +415,10 @@ unittest{
 
     Integer r1;
     r1.init();
- outermost: for (ulong a = 1; a <= LIMIT; a++){
-        for (ulong b = a; b <= LIMIT; b++){
-            for (ulong c = b; c <= LIMIT; c++){
-                for (ulong d = c; d <= LIMIT; d++){
+ outermost: for (c_ulong a = 1; a <= LIMIT; a++){
+        for (c_ulong b = a; b <= LIMIT; b++){
+            for (c_ulong c = b; c <= LIMIT; c++){
+                for (c_ulong d = c; d <= LIMIT; d++){
                     r1 = (Integer(a) ^^ POWER) +
                         (Integer(b) ^^ POWER) +
                         (Integer(c) ^^ POWER) +
@@ -429,7 +430,7 @@ unittest{
                                 POWER);
                     if (rem == 0UL){
                         debug printf("Counter Example Found: %lu^5 + %lu^5 + %lu^5 + %lu^5 = %lu^5\n",
-                                     a, b, c, d, cast(ulong)r1);
+                                     a, b, c, d, cast(c_ulong)r1);
                         found = true;
                         break outermost;
                     }
