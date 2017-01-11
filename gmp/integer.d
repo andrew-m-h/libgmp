@@ -10,8 +10,8 @@ enum TestConstant = 42;
 debug uint TestCount = 0;
 
 void TestPred(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -23,8 +23,8 @@ void TestPred(string FuncName)(){
 }
 
 void TestUnary(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -36,8 +36,8 @@ void TestUnary(string FuncName)(){
 }
 
 void TestUnary_ui(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -49,8 +49,8 @@ void TestUnary_ui(string FuncName)(){
 }
 
 void TestBinary(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -62,8 +62,8 @@ void TestBinary(string FuncName)(){
 }
 
 void TestBinary_ui(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -75,8 +75,8 @@ void TestBinary_ui(string FuncName)(){
 }
 
 void TestBinary_uiui(string FuncName)(){
-    pragma(msg, format("Compiling Function: %s", FuncName));
-    writeln("Running Test: ", FuncName);
+    pragma(msg, format("Compiling Test: %s", FuncName));
+    debug writeln("Running Test: ", FuncName);
 
     mpz_t a1_;
     mpz_ptr a1 = &a1_[0];
@@ -437,26 +437,32 @@ extern (C) int __gmpz_millerrabin (mpz_srcptr, int) pure;
 
 alias mpz_mod = __gmpz_mod;
 extern (C) void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
+unittest{TestBinary!"__gmpz_mod"();}
 
 alias mpz_mod_ui = mpz_fdiv_r_ui /* same as fdiv_r because divisor unsigned */;
 
 alias mpz_mul = __gmpz_mul;
 extern (C) void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
+unittest{TestBinary!"__gmpz_mul"();}
 
 alias mpz_mul_2exp = __gmpz_mul_2exp;
 extern (C) void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
 
 alias mpz_mul_si = __gmpz_mul_si;
 extern (C) void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long);
+unittest{TestBinary_ui!"__gmpz_mul_si"();}
 
 alias mpz_mul_ui = __gmpz_mul_ui;
 extern (C) void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, ulong);
+unittest{TestBinary_ui!"__gmpz_mul_ui"();}
 
 alias mpz_neg = __gmpz_neg;
 extern (C) void __gmpz_neg (mpz_ptr, mpz_srcptr);
+unittest{TestUnary!"__gmpz_neg"();}
 
 alias mpz_nextprime = __gmpz_nextprime;
 extern (C) void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
+unittest{TestUnary!"__gmpz_nextprime"();}
 
 alias mpz_out_raw = __gmpz_out_raw;
 extern (C) size_t __gmpz_out_raw (FILE *, mpz_srcptr);
@@ -467,14 +473,12 @@ extern (C) size_t __gmpz_out_str (FILE *, int, mpz_srcptr);
 alias mpz_perfect_power_p = __gmpz_perfect_power_p;
 extern (C) int __gmpz_perfect_power_p (mpz_srcptr) pure;
 
-alias mpz_perfect_square_p = __gmpz_perfect_square_p;
-extern (C) int __gmpz_perfect_square_p (mpz_srcptr) pure;
-
 alias mpz_popcount = __gmpz_popcount;
 extern (C) mp_bitcnt_t __gmpz_popcount (mpz_srcptr) nothrow pure;
 
 alias mpz_pow_ui = __gmpz_pow_ui;
 extern (C) void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, ulong);
+unittest{TestBinary_ui!"__gmpz_pow_ui"();}
 
 alias mpz_powm = __gmpz_powm;
 extern (C) void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
