@@ -1,9 +1,7 @@
-module gmp.operators;
+module deimos.gmp.operators;
 
-import gmp.gmp;
-import gmp.integer;
-import gmp.rational;
-import gmp.floating;
+import deimos.gmp.gmp;
+import deimos.gmp.integer;
 
 import std.string;
 import std.stdio;
@@ -47,28 +45,6 @@ struct Integer
         value = tmp;
     }
 
-    Integer opAssign(in ulong v) out(result){
-        assert(mpz_cmp_ui(&result.value, v) == 0);
-    } body {
-        mpz_set_ui(&value, v);
-        return this;
-    }
-    Integer opAssign(in long v) out(result){
-        assert(mpz_cmp_si(&result.value, v) == 0);
-    } body {
-        mpz_set_si(&value, v);
-        return this;
-    }
-    Integer opAssign(in double v) out(result){
-        assert(mpz_cmp_d(&result.value, v) == 0);
-    }body{
-        mpz_set_d(&value, v);
-        return this;
-    }
-    Integer opAssign(in string v){
-        mpz_set_str(&value, toStringz(v), DefaultBase);
-        return this;
-    }
     Integer opAssign()(auto ref const Integer v) out(result) {
         assert(mpz_cmp(&result.value, &v.value) == 0);
     }body{

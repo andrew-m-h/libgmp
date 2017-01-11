@@ -1,7 +1,9 @@
-module gmp.floating;
+module deimos.gmp.floating;
 
-import core.stdc.stdio; //FILE
-import gmp.gmp;
+import core.stdc.stdio : FILE;
+import deimos.gmp.gmp;
+
+extern (C) nothrow:
 
 /**************** Float (i.e. F) routines.  ****************/
 

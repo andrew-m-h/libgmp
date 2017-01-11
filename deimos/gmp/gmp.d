@@ -1,8 +1,4 @@
-module gmp.gmp;
-
-public import gmp.integer;
-public import gmp.rational;
-public import gmp.floating;
+module deimos.gmp.gmp;
 
 enum GMP_LIMB_BITS = 64;
 enum GMP_NAIL_BITS = 0;
@@ -14,6 +10,8 @@ enum GMP_NAIL_MASK = ~ GMP_NUMB_MASK;
 
 import core.stdc.stddef;
 import core.stdc.limits;
+
+extern (C) nothrow:
 
 version (__GMP_SHORT_LIMB){
     alias mp_limb_t = uint;
@@ -78,7 +76,7 @@ alias mpf_ptr = __mpf_struct*;
 alias mpq_srcptr = const __mpq_struct*;
 alias mpq_ptr = __mpq_struct*;
 
-T __GMP_ABS(T)(x){return x >= 0 ? x : -x;}
+T __GMP_ABS(T)(T x){return x >= 0 ? x : -x;}
 T __GMP_MAX(T)(T x, T y){return x > y ? x : y;}
 
 mpz_t mpq_numref(mpq_t Q){return [Q[0]._mp_num];}
@@ -138,96 +136,3 @@ extern (C) ulong __gmp_urandomb_ui (gmp_randstate_t, ulong);
 
 alias gmp_urandomm_ui = __gmp_urandomm_ui;
 extern (C) ulong __gmp_urandomm_ui (gmp_randstate_t, ulong);
-
-
-/**************** Formatted output routines.  ****************/
-/*
-#define gmp_asprintf __gmp_asprintf
-__GMP_DECLSPEC int gmp_asprintf (char **, const char *, ...);
-
-#define gmp_fprintf __gmp_fprintf
-#ifdef _GMP_H_HAVE_FILE
-__GMP_DECLSPEC int gmp_fprintf (FILE *, const char *, ...);
-#endif
-
-#define gmp_obstack_printf __gmp_obstack_printf
-#if defined (_GMP_H_HAVE_OBSTACK)
-__GMP_DECLSPEC int gmp_obstack_printf (struct obstack *, const char *, ...);
-#endif
-
-#define gmp_obstack_vprintf __gmp_obstack_vprintf
-#if defined (_GMP_H_HAVE_OBSTACK) && defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_obstack_vprintf (struct obstack *, const char *, va_list);
-#endif
-
-#define gmp_printf __gmp_printf
-__GMP_DECLSPEC int gmp_printf (const char *, ...);
-
-#define gmp_snprintf __gmp_snprintf
-__GMP_DECLSPEC int gmp_snprintf (char *, size_t, const char *, ...);
-
-#define gmp_sprintf __gmp_sprintf
-__GMP_DECLSPEC int gmp_sprintf (char *, const char *, ...);
-
-#define gmp_vasprintf __gmp_vasprintf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vasprintf (char **, const char *, va_list);
-#endif
-
-#define gmp_vfprintf __gmp_vfprintf
-#if defined (_GMP_H_HAVE_FILE) && defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vfprintf (FILE *, const char *, va_list);
-#endif
-
-#define gmp_vprintf __gmp_vprintf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vprintf (const char *, va_list);
-#endif
-
-#define gmp_vsnprintf __gmp_vsnprintf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vsnprintf (char *, size_t, const char *, va_list);
-#endif
-
-#define gmp_vsprintf __gmp_vsprintf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vsprintf (char *, const char *, va_list);
-#endif
-
-*/
-
-/**************** Formatted input routines.  ****************/
-
-/*
-#define gmp_fscanf __gmp_fscanf
-#ifdef _GMP_H_HAVE_FILE
-__GMP_DECLSPEC int gmp_fscanf (FILE *, const char *, ...);
-#endif
-
-#define gmp_scanf __gmp_scanf
-__GMP_DECLSPEC int gmp_scanf (const char *, ...);
-
-#define gmp_sscanf __gmp_sscanf
-__GMP_DECLSPEC int gmp_sscanf (const char *, const char *, ...);
-
-#define gmp_vfscanf __gmp_vfscanf
-#if defined (_GMP_H_HAVE_FILE) && defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vfscanf (FILE *, const char *, va_list);
-#endif
-
-#define gmp_vscanf __gmp_vscanf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vscanf (const char *, va_list);
-#endif
-
-#define gmp_vsscanf __gmp_vsscanf
-#if defined (_GMP_H_HAVE_VA_LIST)
-__GMP_DECLSPEC int gmp_vsscanf (const char *, const char *, va_list);
-#endif
-*/
-
-
-
-/*
-...
-*/

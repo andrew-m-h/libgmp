@@ -1,7 +1,9 @@
-module gmp.rational;
+module deimos.gmp.rational;
 
-import gmp.gmp;
-import core.stdc.stdio; //FILE
+import deimos.gmp.gmp;
+import core.stdc.stdio : FILE;
+
+extern (C) nothrow:
 
 /**************** Rational (i.e. Q) routines.  ****************/
 

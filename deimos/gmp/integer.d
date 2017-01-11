@@ -1,142 +1,51 @@
-module gmp.integer;
+module deimos.gmp.integer;
 
 import std.format;
 import std.stdio;
-import gmp.gmp;
-import core.stdc.stdio; //FILE
+import deimos.gmp.gmp;
 
-enum TestConstant = 42;
+import core.stdc.stdio : FILE;
 
-debug uint TestCount = 0;
-
-void TestPred(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
-
-void TestUnary(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1, a1);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
-
-void TestUnary_ui(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1, TestConstant);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
-
-void TestBinary(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1, a1, a1);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
-
-void TestBinary_ui(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1, a1, TestConstant);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
-
-void TestBinary_uiui(string FuncName)(){
-    pragma(msg, format("Compiling Test: %s", FuncName));
-    debug writeln("Running Test: ", FuncName);
-
-    mpz_t a1_;
-    mpz_ptr a1 = &a1_[0];
-    mpz_init_set_ui(a1, TestConstant);
-    mixin(format(`%s(a1, TestConstant, TestConstant);`, FuncName));
-
-    mpz_clear(a1);
-    debug ++TestCount;
-}
+extern (C) nothrow:
 
 /**************** Integer (i.e. Z) routines.  ****************/
 
 alias _mpz_realloc = __gmpz_realloc;
 alias mpz_realloc = __gmpz_realloc;
 extern (C) void *__gmpz_realloc (mpz_ptr, mp_size_t);
-unittest{TestUnary_ui!"__gmpz_realloc";}
 
 alias mpz_abs = __gmpz_abs;
 extern (C) void __gmpz_abs (mpz_ptr, mpz_srcptr);
-unittest{TestUnary!"__gmpz_abs";}
 
 alias mpz_add = __gmpz_add;
 extern (C) void __gmpz_add (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_add";}
 
 alias mpz_add_ui = __gmpz_add_ui;
 extern (C) void __gmpz_add_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_add_ui";}
 
 alias mpz_addmul = __gmpz_addmul;
 extern (C) void __gmpz_addmul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_addmul";}
 
 alias mpz_addmul_ui = __gmpz_addmul_ui;
 extern (C) void __gmpz_addmul_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_addmul_ui";}
 
 alias mpz_and = __gmpz_and;
 extern (C) void __gmpz_and (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_and";}
 
 alias mpz_bin_ui = __gmpz_bin_ui;
 extern (C) void __gmpz_bin_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_bin_ui";}
 
 alias mpz_bin_uiui = __gmpz_bin_uiui;
 extern (C) void __gmpz_bin_uiui (mpz_ptr, ulong, ulong);
-unittest{TestBinary_uiui!"__gmpz_bin_uiui";}
 
 alias mpz_cdiv_q = __gmpz_cdiv_q;
 extern (C) void __gmpz_cdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_cdiv_q";}
 
 alias mpz_cdiv_q_2exp = __gmpz_cdiv_q_2exp;
 extern (C) void __gmpz_cdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-unittest{TestBinary_ui!"__gmpz_cdiv_q_2exp";}
 
 alias mpz_cdiv_q_ui = __gmpz_cdiv_q_ui;
 extern (C) ulong __gmpz_cdiv_q_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary!"__gmpz_cdiv_q";}
 
 alias mpz_cdiv_qr = __gmpz_cdiv_qr;
 extern (C) void __gmpz_cdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
@@ -146,19 +55,15 @@ extern (C) ulong __gmpz_cdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, ulong);
 
 alias mpz_cdiv_r = __gmpz_cdiv_r;
 extern (C) void __gmpz_cdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_cdiv_r";}
 
 alias mpz_cdiv_r_2exp = __gmpz_cdiv_r_2exp;
 extern (C) void __gmpz_cdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-unittest{TestBinary_ui!"__gmpz_cdiv_r_2exp";}
 
 alias mpz_cdiv_r_ui = __gmpz_cdiv_r_ui;
 extern (C) ulong __gmpz_cdiv_r_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_cdiv_r_ui";}
 
 alias mpz_cdiv_ui = __gmpz_cdiv_ui;
 extern (C) ulong __gmpz_cdiv_ui (mpz_srcptr, ulong) pure;
-unittest{TestUnary_ui!"__gmpz_cdiv_ui";}
 
 alias mpz_clear = __gmpz_clear;
 extern (C) void __gmpz_clear (mpz_ptr);
@@ -168,74 +73,57 @@ extern (C) void __gmpz_clears (mpz_ptr, ...);
 
 alias mpz_clrbit = __gmpz_clrbit;
 extern (C) void __gmpz_clrbit (mpz_ptr, mp_bitcnt_t);
-unittest{TestUnary_ui!"__gmpz_clrbit";}
 
 alias mpz_cmp = __gmpz_cmp;
 extern (C) int __gmpz_cmp (mpz_srcptr, mpz_srcptr) nothrow pure;
-unittest{TestUnary!"__gmpz_cmp";}
 
 alias mpz_cmp_d = __gmpz_cmp_d;
 extern (C) int __gmpz_cmp_d (mpz_srcptr, double) pure;
-unittest{TestUnary_ui!"__gmpz_cmp_d";}
 
 alias mpz_cmp_si  = __gmpz_cmp_si;
 extern (C) int __gmpz_cmp_si (mpz_srcptr, long) nothrow pure;
-unittest{TestUnary_ui!"__gmpz_cmp_si";}
 
 alias mpz_cmp_ui  = __gmpz_cmp_ui;
 extern (C) int __gmpz_cmp_ui (mpz_srcptr, ulong) nothrow pure;
-unittest{TestUnary_ui!"__gmpz_cmp_ui";}
 
 alias mpz_cmpabs = __gmpz_cmpabs;
 extern (C) int __gmpz_cmpabs (mpz_srcptr, mpz_srcptr) nothrow pure;
-unittest{TestUnary!"__gmpz_cmpabs";}
 
 alias mpz_cmpabs_d = __gmpz_cmpabs_d;
 extern (C) int __gmpz_cmpabs_d (mpz_srcptr, double) pure;
-unittest{TestUnary_ui!"__gmpz_cmpabs_d";}
 
 alias mpz_cmpabs_ui = __gmpz_cmpabs_ui;
 extern (C) int __gmpz_cmpabs_ui (mpz_srcptr, ulong) nothrow pure;
-unittest{TestUnary_ui!"__gmpz_cmpabs_ui";}
 
 alias mpz_com = __gmpz_com;
 extern (C) void __gmpz_com (mpz_ptr, mpz_srcptr);
-unittest{TestUnary!"__gmpz_com";}
 
 alias mpz_combit = __gmpz_combit;
 extern (C) void __gmpz_combit (mpz_ptr, mp_bitcnt_t);
-unittest{TestUnary_ui!"__gmpz_combit";}
 
 alias mpz_congruent_p = __gmpz_congruent_p;
 extern (C) int __gmpz_congruent_p (mpz_srcptr, mpz_srcptr, mpz_srcptr) pure;
-unittest{TestBinary!"__gmpz_congruent_p";}
 
 alias mpz_congruent_2exp_p = __gmpz_congruent_2exp_p;
 extern (C) int __gmpz_congruent_2exp_p (mpz_srcptr, mpz_srcptr, mp_bitcnt_t) nothrow pure;
-unittest{TestBinary_ui!"__gmpz_congruent_2exp_p";}
 
 alias mpz_congruent_ui_p = __gmpz_congruent_ui_p;
 extern (C) int __gmpz_congruent_ui_p (mpz_srcptr, ulong, ulong) pure;
 
 alias mpz_divexact = __gmpz_divexact;
 extern (C) void __gmpz_divexact (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_divexact";}
 
 alias mpz_divexact_ui = __gmpz_divexact_ui;
 extern (C) void __gmpz_divexact_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_divexact_ui";}
 
 alias mpz_divisible_p = __gmpz_divisible_p;
 extern (C) int __gmpz_divisible_p (mpz_srcptr, mpz_srcptr) pure;
-unittest{TestUnary!"__gmpz_divisible_p";}
 
 alias mpz_divisible_ui_p = __gmpz_divisible_ui_p;
 extern (C) int __gmpz_divisible_ui_p (mpz_srcptr, ulong) pure;
-unittest{TestUnary_ui!"__gmpz_divisible_ui_p";}
 
 alias mpz_divisible_2exp_p = __gmpz_divisible_2exp_p;
 extern (C) int __gmpz_divisible_2exp_p (mpz_srcptr, mp_bitcnt_t) nothrow pure;
-unittest{TestUnary_ui!"__gmpz_divisible_2exp_p";}
 
 alias mpz_dump = __gmpz_dump;
 extern (C) void __gmpz_dump (mpz_srcptr);
@@ -245,31 +133,24 @@ extern (C) void * __gmpz_export (void *, size_t *, int, size_t, int, size_t, mpz
 
 alias mpz_fac_ui = __gmpz_fac_ui;
 extern (C) void __gmpz_fac_ui (mpz_ptr, ulong);
-unittest{TestUnary_ui!"__gmpz_fac_ui";}
 
 alias mpz_2fac_ui = __gmpz_2fac_ui;
 extern (C) void __gmpz_2fac_ui (mpz_ptr, ulong);
-unittest{TestUnary_ui!"__gmpz_2fac_ui";}
 
 alias mpz_mfac_uiui = __gmpz_mfac_uiui;
 extern (C) void __gmpz_mfac_uiui (mpz_ptr, ulong, ulong);
-unittest{TestBinary_uiui!"__gmpz_mfac_uiui";}
 
 alias mpz_primorial_ui = __gmpz_primorial_ui;
 extern (C) void __gmpz_primorial_ui (mpz_ptr, ulong);
-unittest{TestUnary_ui!"__gmpz_primorial_ui";}
 
 alias mpz_fdiv_q = __gmpz_fdiv_q;
 extern (C) void __gmpz_fdiv_q (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_fdiv_q";}
 
 alias mpz_fdiv_q_2exp = __gmpz_fdiv_q_2exp;
 extern (C) void __gmpz_fdiv_q_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-unittest{TestBinary_ui!"__gmpz_fdiv_q_2exp";}
 
 alias mpz_fdiv_q_ui = __gmpz_fdiv_q_ui;
 extern (C) ulong __gmpz_fdiv_q_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_fdiv_q_ui";}
 
 alias mpz_fdiv_qr = __gmpz_fdiv_qr;
 extern (C) void __gmpz_fdiv_qr (mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
@@ -279,88 +160,69 @@ extern (C) ulong __gmpz_fdiv_qr_ui (mpz_ptr, mpz_ptr, mpz_srcptr, ulong);
 
 alias mpz_fdiv_r = __gmpz_fdiv_r;
 extern (C) void __gmpz_fdiv_r (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_fdiv_r";}
 
 alias mpz_fdiv_r_2exp = __gmpz_fdiv_r_2exp;
 extern (C) void __gmpz_fdiv_r_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
-unittest{TestBinary_ui!"__gmpz_fdiv_r_2exp";}
 
 alias mpz_fdiv_r_ui = __gmpz_fdiv_r_ui;
 extern (C) ulong __gmpz_fdiv_r_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_fdiv_r_ui";}
 
 alias mpz_fdiv_ui = __gmpz_fdiv_ui;
 extern (C) ulong __gmpz_fdiv_ui (mpz_srcptr, ulong) pure;
-unittest{TestUnary_ui!"__gmpz_fdiv_ui";}
 
 alias mpz_fib_ui = __gmpz_fib_ui;
 extern (C) void __gmpz_fib_ui (mpz_ptr, ulong);
-unittest{TestUnary_ui!"__gmpz_fib_ui";}
 
 alias mpz_fib2_ui = __gmpz_fib2_ui;
 extern (C) void __gmpz_fib2_ui (mpz_ptr, mpz_ptr, ulong);
-unittest{TestBinary_ui!"__gmpz_fib2_ui";}
 
 alias mpz_fits_sint_p = __gmpz_fits_sint_p;
 extern (C) int __gmpz_fits_sint_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_sint_p";}
 
 alias mpz_fits_slong_p = __gmpz_fits_slong_p;
 extern (C) int __gmpz_fits_slong_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_slong_p";}
 
 alias mpz_fits_sshort_p = __gmpz_fits_sshort_p;
 extern (C) int __gmpz_fits_sshort_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_sshort_p";}
 
 alias mpz_fits_uint_p = __gmpz_fits_uint_p;
 extern (C) int __gmpz_fits_uint_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_uint_p";}
 
 alias mpz_fits_ulong_p = __gmpz_fits_ulong_p;
 extern (C) int __gmpz_fits_ulong_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_ulong_p";}
 
 alias mpz_fits_ushort_p = __gmpz_fits_ushort_p;
 extern (C) int __gmpz_fits_ushort_p (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_fits_ushort_p";}
 
 alias mpz_gcd = __gmpz_gcd;
 extern (C) void __gmpz_gcd (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_gcd";}
 
 alias mpz_gcd_ui = __gmpz_gcd_ui;
 extern (C) ulong __gmpz_gcd_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_gcd_ui";}
 
 alias mpz_gcdext = __gmpz_gcdext;
 extern (C) void __gmpz_gcdext (mpz_ptr, mpz_ptr, mpz_ptr, mpz_srcptr, mpz_srcptr);
 
 alias mpz_get_d = __gmpz_get_d;
 extern (C) double __gmpz_get_d (mpz_srcptr) pure;
-unittest{TestPred!"__gmpz_get_d";}
 
 alias mpz_get_d_2exp = __gmpz_get_d_2exp;
 extern (C) double __gmpz_get_d_2exp (long *, mpz_srcptr);
 
 alias mpz_get_si = __gmpz_get_si;
 extern (C) /* signed */ long __gmpz_get_si (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_get_si";}
 
 alias mpz_get_str = __gmpz_get_str;
 extern (C) char * __gmpz_get_str (char *, int, mpz_srcptr);
 
 alias mpz_get_ui = __gmpz_get_ui;
 extern (C) ulong __gmpz_get_ui (mpz_srcptr) nothrow pure;
-unittest{TestPred!"__gmpz_get_ui";}
 
 alias mpz_getlimbn = __gmpz_getlimbn;
 extern (C) mp_limb_t __gmpz_getlimbn (mpz_srcptr, mp_size_t) nothrow pure;
-unittest{TestUnary_ui!"__gmpz_getlimbn";}
 
 alias mpz_hamdist = __gmpz_hamdist;
 extern (C) mp_bitcnt_t __gmpz_hamdist (mpz_srcptr, mpz_srcptr) nothrow pure;
-unittest{TestUnary!"__gmpz_hamdist";}
 
 alias mpz_import = __gmpz_import;
 extern (C) void __gmpz_import (mpz_ptr, size_t, int, size_t, int, size_t, const void *);
@@ -437,32 +299,26 @@ extern (C) int __gmpz_millerrabin (mpz_srcptr, int) pure;
 
 alias mpz_mod = __gmpz_mod;
 extern (C) void __gmpz_mod (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_mod"();}
 
 alias mpz_mod_ui = mpz_fdiv_r_ui /* same as fdiv_r because divisor unsigned */;
 
 alias mpz_mul = __gmpz_mul;
 extern (C) void __gmpz_mul (mpz_ptr, mpz_srcptr, mpz_srcptr);
-unittest{TestBinary!"__gmpz_mul"();}
 
 alias mpz_mul_2exp = __gmpz_mul_2exp;
 extern (C) void __gmpz_mul_2exp (mpz_ptr, mpz_srcptr, mp_bitcnt_t);
 
 alias mpz_mul_si = __gmpz_mul_si;
 extern (C) void __gmpz_mul_si (mpz_ptr, mpz_srcptr, long);
-unittest{TestBinary_ui!"__gmpz_mul_si"();}
 
 alias mpz_mul_ui = __gmpz_mul_ui;
 extern (C) void __gmpz_mul_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_mul_ui"();}
 
 alias mpz_neg = __gmpz_neg;
 extern (C) void __gmpz_neg (mpz_ptr, mpz_srcptr);
-unittest{TestUnary!"__gmpz_neg"();}
 
 alias mpz_nextprime = __gmpz_nextprime;
 extern (C) void __gmpz_nextprime (mpz_ptr, mpz_srcptr);
-unittest{TestUnary!"__gmpz_nextprime"();}
 
 alias mpz_out_raw = __gmpz_out_raw;
 extern (C) size_t __gmpz_out_raw (FILE *, mpz_srcptr);
@@ -478,7 +334,6 @@ extern (C) mp_bitcnt_t __gmpz_popcount (mpz_srcptr) nothrow pure;
 
 alias mpz_pow_ui = __gmpz_pow_ui;
 extern (C) void __gmpz_pow_ui (mpz_ptr, mpz_srcptr, ulong);
-unittest{TestBinary_ui!"__gmpz_pow_ui"();}
 
 alias mpz_powm = __gmpz_powm;
 extern (C) void __gmpz_powm (mpz_ptr, mpz_srcptr, mpz_srcptr, mpz_srcptr);
@@ -630,9 +485,3 @@ extern (C) void __gmpz_limbs_finish (mpz_ptr, mp_size_t);
 
 alias mpz_roinit_n = __gmpz_roinit_n;
 extern (C) mpz_srcptr __gmpz_roinit_n (mpz_ptr, mp_srcptr, mp_size_t);
-
-unittest {
-    debug writeln("Number of Tests Run: ", TestCount);
-}
-
-//alias MPZ_ROINIT_N(xp, xs) {{0, (xs),(xp) }}
