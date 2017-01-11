@@ -468,5 +468,3 @@ unittest{
 unittest{
     debug writeln("Number of Tests Run: ", TestCount);
 }
-
-void main(){}
