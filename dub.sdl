@@ -1,0 +1,7 @@
+name "libgmp"
+description "D bindings for GMP with API"
+copyright "Andrew M. Hall"
+authors "Andrew M. Hall"
+targetType "library"
+license "LGPL-3.0"
+libs "gmp"
