@@ -396,7 +396,6 @@ unittest{
 
 //Euler's Sum of Powers Conjecture counter example
 unittest{
-
     pragma(msg, "Compiling Test: Euler's Sum of Powers Conjecture counter example");
     debug writeln("Running Test: Euler's Sum of Powers Conjecture counter example");
 

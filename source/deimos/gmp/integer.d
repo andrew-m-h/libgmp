@@ -7,7 +7,7 @@ import deimos.gmp.gmp;
 import core.stdc.stdio : FILE;
 import core.stdc.config : c_long, c_ulong;
 
-extern (C) nothrow:
+extern (C) nothrow @nogc:
 
 /**************** Integer (i.e. Z) routines.  ****************/
 

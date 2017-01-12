@@ -5,7 +5,7 @@ import core.stdc.config : c_long, c_ulong;
 
 import deimos.gmp.gmp;
 
-extern (C) nothrow:
+extern (C) nothrow @nogc:
 
 /**************** Float (i.e. F) routines.  ****************/
 

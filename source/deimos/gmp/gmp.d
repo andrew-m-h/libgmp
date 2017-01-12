@@ -12,7 +12,7 @@ import core.stdc.stddef;
 import core.stdc.limits;
 import core.stdc.config : c_long, c_ulong;
 
-extern (C) nothrow:
+extern (C) nothrow @nogc:
 
 version (__GMP_SHORT_LIMB){
     alias mp_limb_t = uint;
